@@ -10,7 +10,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>common</artifactId>
+	<artifactId>org.feather.common</artifactId>
 	<name>common</name>
 	<url>http://maven.apache.org</url>
 

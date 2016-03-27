@@ -1,4 +1,4 @@
-package org.common.util;
+package org.feather.common.util;
 
 import java.io.Closeable;
 import java.io.IOException;
