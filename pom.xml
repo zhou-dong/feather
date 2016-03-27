@@ -54,7 +54,7 @@
 				<artifactId>commons-logging</artifactId>
 				<version>${commons.logging.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>org.apache.lucene</groupId>
 				<artifactId>lucene-core</artifactId>
@@ -74,13 +74,6 @@
 		</dependencies>
 
 	</dependencyManagement>
-
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-		</dependency>
-	</dependencies>
 
 	<modules>
 		<module>common</module>
