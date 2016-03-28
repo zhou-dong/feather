@@ -14,13 +14,14 @@ import org.feather.common.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Server implements Module {
+public class Server implements Module, Runnable {
 
 	private static Logger logger = LoggerFactory.getLogger(Server.class);
 
 	private ServerSocket serverSocket;
-	private ExecutorService executorService;
+	private ExecutorService threadPool;
 	private boolean isAlive;
+	private Thread thread;
 
 	public void afterCreate(Object[] params) {
 	}
@@ -28,7 +29,7 @@ public class Server implements Module {
 	public boolean init(boolean isReload) {
 		try {
 			serverSocket = new ServerSocket(Global.SERVER_PORT);
-			executorService = Executors.newCachedThreadPool();
+			threadPool = Executors.newCachedThreadPool();
 			return true;
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
@@ -38,27 +39,23 @@ public class Server implements Module {
 
 	public void start(boolean isReload) {
 		isAlive = true;
-		while (isAlive) {
-			try {
-				executorService.execute(new Handler(serverSocket.accept()));
-			} catch (IOException e) {
-				logger.error(e.getMessage(), e);
-			}
-		}
+		thread = new Thread(this);
+		thread.start();
 	}
 
 	public void stop() {
 		isAlive = false;
-		executorService.shutdown();
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			logger.error(e.getMessage(), e);
+		}
+		threadPool.shutdown();
 		FileUtil.close(serverSocket);
 	}
 
 	public boolean isAlive() {
 		return isAlive;
-	}
-
-	public String getId() {
-		return "server";
 	}
 
 	private class Handler implements Runnable {
@@ -81,6 +78,17 @@ public class Server implements Module {
 				FileUtil.close(socket);
 			}
 		}
+	}
+
+	public void run() {
+		while (!thread.isInterrupted() && isAlive) {
+			try {
+				threadPool.execute(new Handler(serverSocket.accept()));
+			} catch (IOException e) {
+				logger.error(e.getMessage(), e);
+			}
+		}
+		stop();
 	}
 
 }

@@ -1,6 +1,7 @@
 package org.feather.app;
 
 import org.feather.common.Module;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class ServerTest {
@@ -38,6 +39,25 @@ public class ServerTest {
 		Module server = new Server();
 		new StartThread(server).run();
 		new StopThread(server).run();
+	}
+
+	@Test
+	public void testStart() {
+		Module server = new Server();
+		server.init(false);
+		server.start(false);
+	}
+
+	@Test
+	public void testIsAssignableFrom() {
+		boolean result = Module.class.isAssignableFrom(Server.class);
+		Assert.assertTrue(result);
+	}
+
+	@Test
+	public void testIsAssignableFrom1() {
+		boolean result = Server.class.isAssignableFrom(Module.class);
+		Assert.assertFalse(result);
 	}
 
 }

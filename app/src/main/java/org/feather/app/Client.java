@@ -6,19 +6,25 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import org.feather.common.Global;
+
 public class Client {
 
 	public static void main(String[] args) throws UnknownHostException, IOException {
 
-		Socket socket = new Socket("127.0.0.1", 9090);
+		for (int i = 0; i < 1000; i++) {
 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			Socket socket = new Socket("127.0.0.1", Global.SERVER_PORT);
 
-		String answer = reader.readLine();
+			BufferedReader reader = new BufferedReader(
+					new InputStreamReader(socket.getInputStream()));
 
-		System.out.println(answer);
+			String answer = reader.readLine();
 
-		socket.close();
+			System.out.println(answer);
+
+			socket.close();
+		}
 	}
 
 }

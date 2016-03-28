@@ -12,6 +12,4 @@ public interface Module {
 
 	public boolean isAlive();
 
-	public String getId();
-
 }
