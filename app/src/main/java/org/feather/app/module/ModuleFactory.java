@@ -18,7 +18,7 @@ public class ModuleFactory {
 	private static Map<String, ModuleProxy> moduleProxies = new HashMap<String, ModuleProxy>();
 
 	public static void addToStartModule(String module) {
-		toStartModules.add(module);
+		toStartModules.add(Global.moduleId(module));
 	}
 
 	public static void addToStartModule(String module, Set<String> ips) {
@@ -34,11 +34,11 @@ public class ModuleFactory {
 	}
 
 	public static void registerModule(Class<?> moduleClass) {
-		moduleProxies.put(moduleClass.getName(), new ModuleProxy(moduleClass));
+		moduleProxies.put(Global.moduleId(moduleClass), new ModuleProxy(moduleClass));
 	}
 
 	public static void registerModule(Class<?> moduleClass, Object[] params) {
-		moduleProxies.put(moduleClass.getName(), new ModuleProxy(moduleClass, params));
+		moduleProxies.put(Global.moduleId(moduleClass), new ModuleProxy(moduleClass, params));
 	}
 
 	@SuppressWarnings("unchecked")

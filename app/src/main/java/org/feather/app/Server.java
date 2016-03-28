@@ -71,6 +71,7 @@ public class Server implements Module, Runnable {
 				out = new PrintWriter(socket.getOutputStream(), true);
 				out.println(new Date().toString());
 				out.flush();
+				
 			} catch (IOException e) {
 				logger.error(e.getMessage(), e);
 			} finally {

@@ -10,11 +10,11 @@ public class Global {
 	public static String DEVELOP_NAME = "";
 	public static String LOCAL_IP = "";
 
-	public static String moduleId(Module module) {
-		if (module == null) {
+	public static String moduleId(Class<?> cls) {
+		if (cls == null) {
 			return "";
 		}
-		return moduleId(module.getClass().getName());
+		return moduleId(cls.getName());
 	}
 
 	public static String moduleId(String id) {
