@@ -36,4 +36,10 @@ public class ClassTest {
 	public void testGetName() {
 		System.out.println(ClassTest.class.getName());
 	}
+
+	@Test
+	public void testGetClass() {
+		Module module = new TestClass();
+		System.out.println(module.getClass());
+	}
 }
