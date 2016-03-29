@@ -1,6 +1,16 @@
 package org.feather.common.app;
 
+import org.feather.common.util.JsonUtil;
+
 public class Response {
+
+	public static Response parse(String message) {
+		return JsonUtil.fromJson(message, Response.class);
+	}
+
+	public static String toString(Response response) {
+		return JsonUtil.toString(response);
+	}
 
 	private boolean success;
 	private String ip;

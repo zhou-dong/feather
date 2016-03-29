@@ -1,6 +1,19 @@
 package org.feather.common.app;
 
+import org.feather.common.util.JsonUtil;
+
 public class Request {
+
+	public static Request parse(String message) {
+		return JsonUtil.fromJson(message, Request.class);
+	}
+
+	public static String toString(Request request) {
+		return JsonUtil.toString(request);
+	}
+
+	public Request() {
+	}
 
 	private String ip;
 	private String className;
