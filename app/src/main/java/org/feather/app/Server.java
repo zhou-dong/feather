@@ -1,9 +1,6 @@
 package org.feather.app;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -16,6 +13,8 @@ import org.feather.common.app.Request;
 import org.feather.common.app.Response;
 import org.feather.common.reflect.Reflect;
 import org.feather.common.util.FileUtil;
+import org.feather.common.util.SocketUtil;
+import org.feather.common.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,8 +65,6 @@ public class Server implements Module, Runnable {
 	private class Handler implements Runnable {
 
 		Socket socket;
-		BufferedReader in = null;
-		PrintWriter out = null;
 
 		public Handler(Socket socket) {
 			this.socket = socket;
@@ -106,29 +103,19 @@ public class Server implements Module, Runnable {
 			}
 		}
 
-		private String getRequest() throws IOException {
-			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			return in.readLine();
-		}
-
-		private void sendResponse(Response response) throws IOException {
-			if (response != null) {
-				out = new PrintWriter(socket.getOutputStream(), true);
-				out.print(Response.toString(response));
-				out.flush();
-			}
-		}
-
 		public void run() {
 			try {
-				Request request = Request.parse(getRequest());
+				String message = SocketUtil.getMessage(socket);
+				if (StringUtil.isEmpty(message))
+					return;
+				Request request = Request.parse(message);
+				if (request == null)
+					return;
 				Response response = doRequest(request);
-				sendResponse(response);
-			} catch (IOException e) {
-				logger.error(e.getMessage(), e);
+				if (response == null)
+					return;
+				SocketUtil.sendResponse(socket, response);
 			} finally {
-				FileUtil.close(in);
-				FileUtil.close(out);
 				FileUtil.close(socket);
 			}
 		}

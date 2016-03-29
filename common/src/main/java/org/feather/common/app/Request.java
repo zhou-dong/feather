@@ -2,14 +2,19 @@ package org.feather.common.app;
 
 import org.feather.common.Global;
 import org.feather.common.util.JsonUtil;
+import org.feather.common.util.StringUtil;
 
 public class Request {
 
 	public static Request parse(String message) {
+		if (StringUtil.isEmpty(message))
+			return null;
 		return JsonUtil.fromJson(message, Request.class);
 	}
 
 	public static String toString(Request request) {
+		if (request == null)
+			return "";
 		return JsonUtil.toString(request);
 	}
 
