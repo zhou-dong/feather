@@ -63,7 +63,6 @@ public class Server implements Module, Runnable {
 	}
 
 	private class Handler implements Runnable {
-
 		Socket socket;
 
 		public Handler(Socket socket) {
@@ -84,6 +83,8 @@ public class Server implements Module, Runnable {
 			try {
 				Object returnValue = callModule(module, request.getMethodName(),
 						request.getParams());
+				logger.debug("call from [{}] with module [{}] method [{}]", request.getIp(),
+						request.getClassName(), request.getMethodName());
 				return successResponse(module, returnValue + "");
 			} catch (Exception e) {
 				logger.error(e.getMessage(), e);
