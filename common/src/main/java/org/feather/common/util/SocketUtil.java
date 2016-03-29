@@ -16,18 +16,18 @@ public class SocketUtil {
 	private static Logger logger = LoggerFactory.getLogger(SocketUtil.class);
 
 	public static void sendRequest(Socket socket, Request request) {
-		PrintWriter out = getWriter(socket);
-		if (out == null)
-			return;
-		out.println(Request.toString(request));
-		out.flush();
+		sendMessage(socket, Request.toString(request));
 	}
 
 	public static void sendResponse(Socket socket, Response response) {
+		sendMessage(socket, Response.toString(response));
+	}
+
+	public static void sendMessage(Socket socket, String message) {
 		PrintWriter out = getWriter(socket);
 		if (out == null)
 			return;
-		out.println(Response.toString(response));
+		out.println(message);
 		out.flush();
 	}
 
