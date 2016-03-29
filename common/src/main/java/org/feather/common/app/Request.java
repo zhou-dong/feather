@@ -1,5 +1,6 @@
 package org.feather.common.app;
 
+import org.feather.common.Global;
 import org.feather.common.util.JsonUtil;
 
 public class Request {
@@ -33,7 +34,7 @@ public class Request {
 	}
 
 	public void setClassName(String className) {
-		this.className = className;
+		this.className = Global.moduleId(className);
 	}
 
 	public String getMethodName() {

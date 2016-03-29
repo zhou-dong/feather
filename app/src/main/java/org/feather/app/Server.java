@@ -64,13 +64,20 @@ public class Server implements Module, Runnable {
 	}
 
 	private class Handler implements Runnable {
+
 		Socket socket;
+		BufferedReader in = null;
+		PrintWriter out = null;
 
 		public Handler(Socket socket) {
 			this.socket = socket;
 		}
 
 		private Response doRequest(Request request) {
+			if (request == null) {
+				logger.info("no request socket");
+				return null;
+			}
 			Module module = ModuleFactory.module(request.getClassName());
 			if (module == null) {
 				logger.error("call from [{}] with module [{}] not registered", request.getIp(),
@@ -80,7 +87,7 @@ public class Server implements Module, Runnable {
 			try {
 				Object returnValue = callModule(module, request.getMethodName(),
 						request.getParams());
-				return successResponse(module, returnValue);
+				return successResponse(module, returnValue + "");
 			} catch (Exception e) {
 				logger.error(e.getMessage(), e);
 				return new Response(false, e.getMessage());
@@ -100,28 +107,15 @@ public class Server implements Module, Runnable {
 		}
 
 		private String getRequest() throws IOException {
-			BufferedReader in = null;
-			try {
-				in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				StringBuilder result = new StringBuilder();
-				String line = null;
-				while ((line = in.readLine()) != null) {
-					result.append(line);
-				}
-				return result.toString();
-			} finally {
-				FileUtil.close(in);
-			}
+			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			return in.readLine();
 		}
 
 		private void sendResponse(Response response) throws IOException {
-			PrintWriter out = null;
-			try {
+			if (response != null) {
 				out = new PrintWriter(socket.getOutputStream(), true);
 				out.print(Response.toString(response));
 				out.flush();
-			} finally {
-				FileUtil.close(out);
 			}
 		}
 
@@ -133,6 +127,8 @@ public class Server implements Module, Runnable {
 			} catch (IOException e) {
 				logger.error(e.getMessage(), e);
 			} finally {
+				FileUtil.close(in);
+				FileUtil.close(out);
 				FileUtil.close(socket);
 			}
 		}
