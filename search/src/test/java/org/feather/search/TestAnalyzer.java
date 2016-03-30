@@ -13,6 +13,7 @@ import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
 import org.apache.lucene.analysis.tokenattributes.PositionIncrementAttribute;
 import org.apache.lucene.analysis.tokenattributes.TypeAttribute;
+import org.feather.search.analysis.SynonymAnalyzer;
 import org.junit.Test;
 
 public class TestAnalyzer {
@@ -25,6 +26,7 @@ public class TestAnalyzer {
 		displayToken(str, new StopAnalyzer());
 		displayToken(str, new SimpleAnalyzer());
 		displayToken(str, new WhitespaceAnalyzer());
+		displayToken(str, new SynonymAnalyzer());
 	}
 
 	@Test
@@ -33,6 +35,7 @@ public class TestAnalyzer {
 		displayAllTokenInfo(str, new StopAnalyzer());
 		displayAllTokenInfo(str, new SimpleAnalyzer());
 		displayAllTokenInfo(str, new WhitespaceAnalyzer());
+		displayAllTokenInfo(str, new SynonymAnalyzer());
 	}
 
 	public void displayToken(String str, Analyzer analyzer) throws IOException {

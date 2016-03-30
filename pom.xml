@@ -21,6 +21,7 @@
 		<jsoup.version>1.8.3</jsoup.version>
 		<gson.version>2.6.2</gson.version>
 		<commons.io.version>2.4</commons.io.version>
+		<mmseg4j-all-with-dic>1.8.6</mmseg4j-all-with-dic>
 	</properties>
 
 	<dependencyManagement>
@@ -92,7 +93,15 @@
 				<artifactId>commons-io</artifactId>
 				<version>${commons.io.version}</version>
 			</dependency>
+
+			<dependency>
+				<groupId>com.chenlb.mmseg4j</groupId>
+				<artifactId>mmseg4j-all-with-dic</artifactId>
+				<version>${mmseg4j-all-with-dic}</version>
+			</dependency>
+
 		</dependencies>
+
 	</dependencyManagement>
 
 	<modules>
