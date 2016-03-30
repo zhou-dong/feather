@@ -4,11 +4,18 @@ import org.feather.common.util.StringUtil;
 
 public class Global {
 
-	public static int SERVER_PORT = 9090;
-	public static boolean DEVELOP_MODEL = true;
-	public static boolean MODULE_NAME_SENSITIVE = false;
-	public static String DEVELOP_NAME = "";
-	public static String LOCAL_IP = "";
+	public static int serverPort = 9090;
+	public static boolean developMode = true;
+	public static boolean moduleNameSensitive = false;
+	public static String developName = null;
+	public static String localIP = null;
+	public static String localName = null;
+
+	static {
+		localIP = StringUtil.getLocalIP();
+		localName = StringUtil.getLocalName();
+		developName = localName;
+	}
 
 	public static String moduleId(Class<?> cls) {
 		if (cls == null) {
@@ -21,11 +28,11 @@ public class Global {
 		if (StringUtil.isEmpty(id)) {
 			return "";
 		}
-		if (!MODULE_NAME_SENSITIVE) {
+		if (!moduleNameSensitive) {
 			id = id.toLowerCase();
 		}
-		if (DEVELOP_MODEL) {
-			return id + "@" + DEVELOP_NAME;
+		if (developMode) {
+			return id + "@" + developName;
 		} else {
 			return id;
 		}

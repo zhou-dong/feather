@@ -1,14 +1,19 @@
 package org.feather.common.app;
 
 import org.feather.common.util.JsonUtil;
+import org.feather.common.util.StringUtil;
 
 public class Response {
 
 	public static Response parse(String message) {
+		if (StringUtil.isEmpty(message))
+			return null;
 		return JsonUtil.fromJson(message, Response.class);
 	}
 
 	public static String toString(Response response) {
+		if (response == null)
+			return "";
 		return JsonUtil.toString(response);
 	}
 

@@ -22,7 +22,7 @@ public class ModuleFactory {
 	}
 
 	public static void addToStartModule(String module, Set<String> ips) {
-		if (ips.contains(Global.LOCAL_IP)) {
+		if (ips.contains(Global.localIP)) {
 			addToStartModule(module);
 		}
 	}

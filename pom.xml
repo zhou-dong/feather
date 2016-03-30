@@ -20,6 +20,7 @@
 		<lucene.version>5.5.0</lucene.version>
 		<jsoup.version>1.8.3</jsoup.version>
 		<gson.version>2.6.2</gson.version>
+		<commons.io.version>2.4</commons.io.version>
 	</properties>
 
 	<dependencyManagement>
@@ -86,6 +87,11 @@
 				<version>${gson.version}</version>
 			</dependency>
 
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>${commons.io.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

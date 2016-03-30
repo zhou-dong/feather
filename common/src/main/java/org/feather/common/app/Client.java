@@ -15,7 +15,7 @@ public class Client {
 	private static Logger logger = LoggerFactory.getLogger(Client.class);
 
 	public static Response request(String host, Request request) {
-		return request(host, Global.SERVER_PORT, request);
+		return request(host, Global.serverPort, request);
 	}
 
 	private static Response request(String host, int port, Request request) {

@@ -32,7 +32,7 @@ public class Server implements Module, Runnable {
 
 	public boolean init(boolean isReload) {
 		try {
-			serverSocket = new ServerSocket(Global.SERVER_PORT);
+			serverSocket = new ServerSocket(Global.serverPort);
 			threadPool = Executors.newCachedThreadPool();
 			return true;
 		} catch (IOException e) {
