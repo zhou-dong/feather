@@ -15,7 +15,12 @@ import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.feather.crawler.CraiglistCrawler;
@@ -74,7 +79,8 @@ public class TestIndex {
 			}
 			writer.addDocument(createDocument(craiglistCrawler.infos.poll()));
 			bulkWrite();
-			if (craiglistCrawler.count >= 200) {
+			System.out.print("--- " + craiglistCrawler.count + " ---");
+			if (craiglistCrawler.count >= 10) {
 				thread.join();
 				craiglistCrawler.isFinish = true;
 			}
@@ -101,6 +107,18 @@ public class TestIndex {
 		for (Map.Entry<String, String> entry : info.getCarInfo().entrySet())
 			document.add(new TextField(entry.getKey(), entry.getValue(), Store.YES));
 		return document;
+	}
+
+	@Test
+	public void testSearcher() throws ParseException, IOException {
+		String queryString = "Sedan";
+		QueryParser parser = new QueryParser("title", new StandardAnalyzer());
+		Query query = parser.parse(queryString);
+		TopDocs topDocs = searcher.search(query, 15);
+		for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
+			Document document = searcher.doc(scoreDoc.doc);
+			System.out.println(document.get("title"));
+		}
 	}
 
 }
