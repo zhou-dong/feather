@@ -46,7 +46,7 @@ public class SynonymTokenFilter extends TokenFilter {
 
 	private boolean setSynonyms(String word) {
 		String[] words = Thesaurus.getSynonyms(word);
-		if (words == null)
+		if (words == null || words.length == 0)
 			return false;
 		for (String synonym : words)
 			synonyms.push(synonym);
