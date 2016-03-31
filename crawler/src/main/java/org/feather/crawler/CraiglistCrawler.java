@@ -6,8 +6,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,7 +18,10 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CraiglistCrawler {
+public class CraiglistCrawler implements Runnable {
+
+	public boolean isFinish = false;
+	public Queue<DetailedInfo> infos = new LinkedList<DetailedInfo>();
 
 	static Logger logger = LoggerFactory.getLogger(CraiglistCrawler.class);
 
@@ -133,6 +138,10 @@ public class CraiglistCrawler {
 		return url + "search/cta";
 	}
 
+	public void run() {
+		run(url);
+	}
+
 	public void run(String url) {
 		CraiglistCrawler cc = new CraiglistCrawler();
 		List<String> cityUrls = cc.getNearCitys(url);
@@ -146,12 +155,13 @@ public class CraiglistCrawler {
 				}
 				for (String page : pages) {
 					DetailedInfo info = getAutoDetailedInfo(page);
+					infos.add(info);
 					System.out.println(info);
 				}
 			}
 
 		}
-
+		isFinish = true;
 	}
 
 }
