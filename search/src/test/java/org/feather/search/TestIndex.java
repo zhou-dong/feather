@@ -25,7 +25,7 @@ import org.junit.Test;
 
 public class TestIndex {
 
-	String indexPath = "/Users/liangkai/workspace/index";
+	String indexPath = "/Users/dongdong/Workspaces/index";
 
 	Directory directory = null;
 	IndexWriter writer = null;
@@ -60,11 +60,10 @@ public class TestIndex {
 	private int flushIndex = 0;
 
 	@Test
-	public void createIndex() throws IOException {
+	public void createIndex() throws IOException, InterruptedException {
 		CraiglistCrawler craiglistCrawler = new CraiglistCrawler();
 		Thread thread = new Thread(craiglistCrawler);
 		thread.start();
-
 		while (craiglistCrawler.isFinish == false) {
 			if (craiglistCrawler.infos.isEmpty()) {
 				try {
@@ -75,6 +74,10 @@ public class TestIndex {
 			}
 			writer.addDocument(createDocument(craiglistCrawler.infos.poll()));
 			bulkWrite();
+			if (craiglistCrawler.count >= 200) {
+				thread.join();
+				craiglistCrawler.isFinish = true;
+			}
 		}
 	}
 
@@ -84,10 +87,9 @@ public class TestIndex {
 			writer.commit();
 			flushIndex = 0;
 		}
-
 	}
 
-	public Document createDocument(DetailedInfo info) {
+	private Document createDocument(DetailedInfo info) {
 		flushIndex++;
 		Document document = new Document();
 		document.add(new TextField("title", info.getTitle(), Store.YES));

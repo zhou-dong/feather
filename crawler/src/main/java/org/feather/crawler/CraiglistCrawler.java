@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 public class CraiglistCrawler implements Runnable {
 
 	public boolean isFinish = false;
+	public int count = 0;
 	public Queue<DetailedInfo> infos = new LinkedList<DetailedInfo>();
 
 	static Logger logger = LoggerFactory.getLogger(CraiglistCrawler.class);
@@ -99,7 +100,8 @@ public class CraiglistCrawler implements Runnable {
 	private double getPrice(String price) {
 		if (price == null || price.length() == 0)
 			return 0d;
-		return price.startsWith("$") ? Double.parseDouble(price.substring(1)) : Double.parseDouble(price);
+		return price.startsWith("$") ? Double.parseDouble(price.substring(1))
+				: Double.parseDouble(price);
 	}
 
 	private Map<String, String> getInfoMap(Elements carDetails) {
@@ -155,6 +157,9 @@ public class CraiglistCrawler implements Runnable {
 				}
 				for (String page : pages) {
 					DetailedInfo info = getAutoDetailedInfo(page);
+					if (info == null)
+						continue;
+					count++;
 					infos.add(info);
 					System.out.println(info);
 				}
