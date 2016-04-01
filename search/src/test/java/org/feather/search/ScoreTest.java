@@ -10,7 +10,9 @@ import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queries.CustomScoreProvider;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -23,11 +25,34 @@ import org.junit.Test;
 
 public class ScoreTest {
 
+	class DateScoreProvider extends CustomScoreProvider {
+
+		public DateScoreProvider(LeafReaderContext context) {
+			super(context);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		public float customScore(int doc, float subQueryScore, float valSrcScore)
+				throws IOException {
+			// TODO Auto-generated method stub
+			return super.customScore(doc, subQueryScore, valSrcScore);
+		}
+
+		@Override
+		public float customScore(int arg0, float arg1, float[] arg2) throws IOException {
+			// TODO Auto-generated method stub
+			return super.customScore(arg0, arg1, arg2);
+		}
+
+	}
+
 	@Test
 	public void test() throws IOException {
 		Query query = new TermQuery(new Term("title", "toyota"));
 		TopDocs topDocs = searcher.search(query, 15);
 		displayDocs(topDocs);
+
 	}
 
 	String indexPath = "/Users/dongdong/Workspaces/index";
