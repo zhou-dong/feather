@@ -115,10 +115,25 @@ public class TestIndex {
 		QueryParser parser = new QueryParser("title", new StandardAnalyzer());
 		Query query = parser.parse(queryString);
 		TopDocs topDocs = searcher.search(query, 15);
+		displayDocs(topDocs);
+	}
+
+	@Test
+	public void testSearcherSort() throws ParseException, IOException {
+		String queryString = "Sedan";
+		QueryParser parser = new QueryParser("title", new StandardAnalyzer());
+		Query query = parser.parse(queryString);
+		TopDocs topDocs = searcher.search(query, 15);
+		displayDocs(topDocs);
+	}
+
+	private void displayDocs(TopDocs topDocs) throws IOException {
 		for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
 			Document document = searcher.doc(scoreDoc.doc);
 			System.out.println(document.get("title"));
 		}
 	}
 
+	public void testFilter() {
+	}
 }
