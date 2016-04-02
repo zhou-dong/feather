@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.search.IndexSearcher;
@@ -28,7 +29,7 @@ public class LuceneIndex {
 		init(indexPath, analyzer);
 	}
 
-	private IndexWriter indexWriter;
+	protected IndexWriter indexWriter;
 	private Directory directory;
 	private SearcherManager searcherManager;
 
@@ -39,7 +40,6 @@ public class LuceneIndex {
 			searcherManager = new SearcherManager(indexWriter, new SearcherFactory());
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
-			// throw new RuntimeException(e);
 		}
 	}
 
@@ -68,9 +68,29 @@ public class LuceneIndex {
 
 	public void commit() {
 		try {
+			indexWriter.flush();
 			indexWriter.commit();
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
+		}
+	}
+
+	private int flushIndex = 0;
+
+	public void addDocument(Document document) {
+		try {
+			indexWriter.addDocument(document);
+			flushIndex++;
+			bulkWrite();
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+
+	private void bulkWrite() throws IOException {
+		if (flushIndex >= 50) {
+			commit();
+			flushIndex = 0;
 		}
 	}
 

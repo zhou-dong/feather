@@ -1,6 +1,5 @@
 package org.feather.implement.craigslist;
 
-import java.io.IOException;
 import java.util.Map;
 
 import org.apache.lucene.document.Document;
@@ -18,14 +17,8 @@ public class CarIndex extends LuceneIndex {
 	}
 
 	public void addDocument(Auto auto) {
-		Document doc = createDocument(auto);
-		try {
-			getWriter().addDocument(doc);
-			flushIndex++;
-			bulkWrite();
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		}
+		Document document = createDocument(auto);
+		addDocument(document);
 	}
 
 	private Document createDocument(Auto auto) {
@@ -39,16 +32,6 @@ public class CarIndex extends LuceneIndex {
 		for (Map.Entry<String, String> entry : auto.getAutoInfo().entrySet())
 			document.add(new TextField(entry.getKey(), entry.getValue(), Store.YES));
 		return document;
-	}
-
-	private int flushIndex = 0;
-
-	private void bulkWrite() throws IOException {
-		if (flushIndex >= 50) {
-			getWriter().flush();
-			getWriter().commit();
-			flushIndex = 0;
-		}
 	}
 
 }
