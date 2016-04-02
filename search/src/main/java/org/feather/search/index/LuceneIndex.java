@@ -12,6 +12,7 @@ import org.apache.lucene.search.SearcherFactory;
 import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.feather.common.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,6 +72,12 @@ public class LuceneIndex {
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}
+	}
+
+	public void close() {
+		FileUtil.close(indexWriter);
+		FileUtil.close(directory);
+		FileUtil.close(searcherManager);
 	}
 
 }
