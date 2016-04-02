@@ -1,32 +1,32 @@
 package org.feather.implement;
 
 import org.feather.common.Module;
+import org.feather.implement.craigslist.CarIndex;
 
 public class IndexServer implements Module {
 
-	public boolean init(boolean isReload) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	private boolean alive = false;
+	private CarIndex index = null;
 
 	public void afterCreate(Object[] params) {
-		// TODO Auto-generated method stub
+	}
 
+	public boolean init(boolean isReload) {
+		index = new CarIndex();
+		return true;
 	}
 
 	public void start(boolean isReload) {
-		// TODO Auto-generated method stub
-
+		alive = true;
 	}
 
 	public void stop() {
-		// TODO Auto-generated method stub
-
+		alive = false;
+		index.close();
 	}
 
 	public boolean isAlive() {
-		// TODO Auto-generated method stub
-		return false;
+		return alive;
 	}
 
 }

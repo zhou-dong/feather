@@ -1,8 +1,12 @@
 package org.feather.app;
 
 import org.feather.app.module.ModuleFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class Start {
+
+	Logger logger = LoggerFactory.getLogger(Start.class);
 
 	public abstract void registerModules();
 
@@ -14,6 +18,7 @@ public abstract class Start {
 		registerModules();
 		addToStartModules();
 		ModuleFactory.startModules();
+		logger.info("App is running now.");
 	}
 
 }

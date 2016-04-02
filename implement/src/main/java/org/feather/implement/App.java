@@ -1,23 +1,22 @@
 package org.feather.implement;
 
 import org.feather.app.Start;
+import org.feather.app.module.ModuleFactory;
 
 public class App extends Start {
 
 	public static void main(String[] args) {
-		Start start = new App();
-		start.start();
+		new App().start();
 	}
 
 	@Override
 	public void registerModules() {
-		// TODO Auto-generated method stub
-
+		ModuleFactory.registerModule(IndexServer.class);
 	}
 
 	@Override
 	public void addToStartModules() {
-		// TODO Auto-generated method stub
-
+		ModuleFactory.addToStartModule(IndexServer.class.getName());
 	}
+
 }
