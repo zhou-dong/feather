@@ -12,9 +12,9 @@ import org.feather.crawler.Auto;
 import org.feather.crawler.CraiglistCrawler;
 import org.feather.search.index.LuceneIndex;
 
-public class AutoIndex extends LuceneIndex {
+public class CarIndex extends LuceneIndex {
 
-	public AutoIndex() {
+	public CarIndex() {
 		super("/Users/dongdong/Workspaces/index");
 	}
 
@@ -42,6 +42,7 @@ public class AutoIndex extends LuceneIndex {
 			}
 			getWriter().addDocument(createDocument(craiglistCrawler.autos.poll()));
 			bulkWrite();
+			System.out.print("--- " + craiglistCrawler.count + " ---");
 			if (craiglistCrawler.count >= 10) {
 				thread.join();
 				craiglistCrawler.isFinish = true;
