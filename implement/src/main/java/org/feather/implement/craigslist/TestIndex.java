@@ -1,4 +1,4 @@
-package org.feather.search;
+package org.feather.implement.craigslist;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -23,8 +23,8 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.feather.crawler.Auto;
 import org.feather.crawler.CraiglistCrawler;
-import org.feather.crawler.DetailedInfo;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -70,14 +70,14 @@ public class TestIndex {
 		Thread thread = new Thread(craiglistCrawler);
 		thread.start();
 		while (craiglistCrawler.isFinish == false) {
-			if (craiglistCrawler.infos.isEmpty()) {
+			if (craiglistCrawler.autos.isEmpty()) {
 				try {
 					Thread.sleep(5000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
-			writer.addDocument(createDocument(craiglistCrawler.infos.poll()));
+			writer.addDocument(createDocument(craiglistCrawler.autos.poll()));
 			bulkWrite();
 			System.out.print("--- " + craiglistCrawler.count + " ---");
 			if (craiglistCrawler.count >= 10) {
@@ -95,16 +95,16 @@ public class TestIndex {
 		}
 	}
 
-	private Document createDocument(DetailedInfo info) {
+	private Document createDocument(Auto info) {
 		flushIndex++;
 		Document document = new Document();
 		document.add(new TextField("title", info.getTitle(), Store.YES));
 		document.add(new TextField("description", info.getDescription(), Store.YES));
-		document.add(new TextField("carName", info.getCarName(), Store.YES));
+		document.add(new TextField("carName", info.getAutoName(), Store.YES));
 		document.add(new LongField("postedTime", info.getPostedTime(), Store.YES));
 		document.add(new LongField("updatedTime", info.getUpdatedTime(), Store.YES));
 		document.add(new DoubleField("price", info.getPrice(), Store.YES));
-		for (Map.Entry<String, String> entry : info.getCarInfo().entrySet())
+		for (Map.Entry<String, String> entry : info.getAutoInfo().entrySet())
 			document.add(new TextField(entry.getKey(), entry.getValue(), Store.YES));
 		return document;
 	}

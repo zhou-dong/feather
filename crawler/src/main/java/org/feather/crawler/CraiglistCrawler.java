@@ -22,7 +22,7 @@ public class CraiglistCrawler implements Runnable {
 
 	public boolean isFinish = false;
 	public int count = 0;
-	public Queue<DetailedInfo> infos = new LinkedList<DetailedInfo>();
+	public Queue<Auto> autos = new LinkedList<Auto>();
 
 	static Logger logger = LoggerFactory.getLogger(CraiglistCrawler.class);
 
@@ -66,8 +66,8 @@ public class CraiglistCrawler implements Runnable {
 			return null;
 	}
 
-	private DetailedInfo getAutoDetailedInfo(String url) {
-		DetailedInfo info = new DetailedInfo();
+	private Auto getAutoDetailedInfo(String url) {
+		Auto info = new Auto();
 		Document doc = null;
 		try {
 			doc = Jsoup.connect(url).get();
@@ -83,8 +83,8 @@ public class CraiglistCrawler implements Runnable {
 		info.setPrice(getPrice(price));
 
 		Elements carInfo = doc.select(".attrgroup");
-		info.setCarName(getFirstContent(carInfo.first().select("span > b")));
-		info.setCarInfo(getInfoMap(carInfo.get(1).select("span")));
+		info.setAutoName(getFirstContent(carInfo.first().select("span > b")));
+		info.setAutoInfo(getInfoMap(carInfo.get(1).select("span")));
 
 		Elements time = doc.select(".postinginfo > time");
 		String postTime = time.get(1).attr("datetime");
@@ -156,11 +156,11 @@ public class CraiglistCrawler implements Runnable {
 					break;
 				}
 				for (String page : pages) {
-					DetailedInfo info = getAutoDetailedInfo(page);
+					Auto info = getAutoDetailedInfo(page);
 					if (info == null)
 						continue;
 					count++;
-					infos.add(info);
+					autos.add(info);
 					System.out.println(info);
 				}
 			}
