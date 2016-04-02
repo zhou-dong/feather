@@ -5,56 +5,72 @@ import java.nio.file.Paths;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.SearcherFactory;
+import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.feather.common.util.FileUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LuceneIndex {
 
-	private Directory directory;
-	private DirectoryReader directoryReader;
+	protected Logger logger = LoggerFactory.getLogger(getClass());
+
+	public LuceneIndex(String indexPath) {
+		this(indexPath, new StandardAnalyzer());
+	}
+
+	public LuceneIndex(String indexPath, Analyzer analyzer) {
+		init(indexPath, analyzer);
+	}
+
 	private IndexWriter indexWriter;
-	private IndexSearcher indexSearcher;
+	private Directory directory;
+	private SearcherManager searcherManager;
 
-	private static String defaultIndexPath = "/Users/dongdong/Workspaces/index";
-
-	public LuceneIndex() throws IOException {
-		this(defaultIndexPath);
+	private void init(String indexPath, Analyzer analyzer) {
+		try {
+			directory = FSDirectory.open(Paths.get(indexPath));
+			indexWriter = new IndexWriter(directory, new IndexWriterConfig(analyzer));
+			searcherManager = new SearcherManager(indexWriter, new SearcherFactory());
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+			throw new RuntimeException(e);
+		}
 	}
 
-	public LuceneIndex(String indexPath) throws IOException {
-		directory = FSDirectory.open(Paths.get(indexPath));
-		createIndexWriter();
-		createIndexSearcher();
+	public IndexWriter getWriter() {
+		return this.indexWriter;
 	}
 
-	private void createIndexWriter() throws IOException {
-		Analyzer analyzer = new StandardAnalyzer();
-		IndexWriterConfig config = new IndexWriterConfig(analyzer);
-		this.indexWriter = new IndexWriter(directory, config);
+	public IndexSearcher getSearcher() {
+		try {
+			return searcherManager.acquire();
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+			return null;
+		}
 	}
 
-	private void createIndexSearcher() throws IOException {
-		directoryReader = DirectoryReader.open(directory);
-		this.indexSearcher = new IndexSearcher(directoryReader);
+	public void releaseSearcher(IndexSearcher indexSearcher) {
+		if (indexSearcher == null)
+			return;
+		try {
+			searcherManager.release(indexSearcher);
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}
 	}
 
-	public IndexWriter getIndexWriter() {
-		return indexWriter;
-	}
-
-	public IndexSearcher getIndexSearcher() {
-		return indexSearcher;
-	}
-
-	public void close() {
-		FileUtil.close(indexWriter);
-		FileUtil.close(directoryReader);
-		FileUtil.close(directory);
+	public void commit() {
+		try {
+			indexWriter.commit();
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}
 	}
 
 }

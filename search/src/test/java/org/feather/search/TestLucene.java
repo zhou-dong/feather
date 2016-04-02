@@ -10,9 +10,18 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
+import org.feather.search.index.LuceneIndex;
+import org.junit.Before;
 import org.junit.Test;
 
 public class TestLucene {
+
+	LuceneIndex index = null;
+
+	@Before
+	public void createIndex() {
+		index = new LuceneIndex("/Users/dongdong/Workspaces/index");
+	}
 
 	@Test
 	public void testMultiSearch() throws ParseException, IOException {
@@ -22,17 +31,17 @@ public class TestLucene {
 	}
 
 	private void search(String field, String queryString) throws ParseException, IOException {
-		IndexSearcher searcher = Lucene.AUTO.getSearcher();
+		IndexSearcher searcher = index.getSearcher();
 		QueryParser parser = new QueryParser(field, new StandardAnalyzer());
 		Query query = parser.parse(queryString);
 		TopDocs topDocs = searcher.search(query, 15);
 		displayDocs(topDocs);
-		Lucene.AUTO.releaseSearcher(searcher);
+		index.releaseSearcher(searcher);
 	}
 
 	private void displayDocs(TopDocs topDocs) throws IOException {
 		for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
-			Document document = Lucene.AUTO.getSearcher().doc(scoreDoc.doc);
+			Document document = index.getSearcher().doc(scoreDoc.doc);
 			System.out.println(document.get("title"));
 		}
 	}
