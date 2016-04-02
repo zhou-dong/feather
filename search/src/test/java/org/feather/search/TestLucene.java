@@ -25,7 +25,7 @@ public class TestLucene {
 
 	@Test
 	public void testMultiSearch() throws ParseException, IOException {
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 1; i++) {
 			search("title", "dodge");
 		}
 	}

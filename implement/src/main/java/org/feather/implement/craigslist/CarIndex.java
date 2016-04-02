@@ -9,7 +9,6 @@ import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.LongField;
 import org.apache.lucene.document.TextField;
 import org.feather.crawler.Auto;
-import org.feather.crawler.CraiglistCrawler;
 import org.feather.search.index.LuceneIndex;
 
 public class CarIndex extends LuceneIndex {
@@ -18,35 +17,14 @@ public class CarIndex extends LuceneIndex {
 		super("/Users/dongdong/Workspaces/index");
 	}
 
-	private int flushIndex = 0;
-
-	private void bulkWrite() throws IOException {
-		if (flushIndex >= 50) {
-			getWriter().flush();
-			getWriter().commit();
-			flushIndex = 0;
-		}
-	}
-
-	public void createIndex() throws IOException, InterruptedException {
-		CraiglistCrawler craiglistCrawler = new CraiglistCrawler();
-		Thread thread = new Thread(craiglistCrawler);
-		thread.start();
-		while (craiglistCrawler.isFinish == false) {
-			if (craiglistCrawler.autos.isEmpty()) {
-				try {
-					Thread.sleep(5000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-			getWriter().addDocument(createDocument(craiglistCrawler.autos.poll()));
+	public void addDocument(Auto auto) {
+		Document doc = createDocument(auto);
+		try {
+			getWriter().addDocument(doc);
+			flushIndex++;
 			bulkWrite();
-			System.out.print("--- " + craiglistCrawler.count + " ---");
-			if (craiglistCrawler.count >= 10) {
-				thread.join();
-				craiglistCrawler.isFinish = true;
-			}
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -61,6 +39,16 @@ public class CarIndex extends LuceneIndex {
 		for (Map.Entry<String, String> entry : auto.getAutoInfo().entrySet())
 			document.add(new TextField(entry.getKey(), entry.getValue(), Store.YES));
 		return document;
+	}
+
+	private int flushIndex = 0;
+
+	private void bulkWrite() throws IOException {
+		if (flushIndex >= 50) {
+			getWriter().flush();
+			getWriter().commit();
+			flushIndex = 0;
+		}
 	}
 
 }

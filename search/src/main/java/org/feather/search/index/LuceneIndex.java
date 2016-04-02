@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 public class LuceneIndex {
 
-	protected Logger logger = LoggerFactory.getLogger(getClass());
+	protected Logger logger = LoggerFactory.getLogger(LuceneIndex.class);
 
 	public LuceneIndex(String indexPath) {
 		this(indexPath, new StandardAnalyzer());
@@ -39,7 +39,7 @@ public class LuceneIndex {
 			searcherManager = new SearcherManager(indexWriter, new SearcherFactory());
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
-			throw new RuntimeException(e);
+			// throw new RuntimeException(e);
 		}
 	}
 
