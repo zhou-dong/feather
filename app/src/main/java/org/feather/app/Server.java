@@ -32,8 +32,8 @@ public class Server implements Module, Runnable {
 
 	public boolean init(boolean isReload) {
 		try {
-			serverSocket = new ServerSocket(Global.serverPort);
 			threadPool = Executors.newCachedThreadPool();
+			serverSocket = new ServerSocket(Global.serverPort);
 			return true;
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);

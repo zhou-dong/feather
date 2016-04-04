@@ -12,11 +12,13 @@ public class App extends Start {
 	@Override
 	public void registerModules() {
 		ModuleFactory.registerModule(IndexServer.class);
+		ModuleFactory.registerModule(ExampleModule.class);
 	}
 
 	@Override
 	public void addToStartModules() {
 		ModuleFactory.addToStartModule(IndexServer.class.getName());
+		ModuleFactory.addToStartModule(ExampleModule.class.getName());
 	}
 
 }

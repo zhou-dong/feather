@@ -1,4 +1,4 @@
-package org.implement;
+package org.feather.implement;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
