@@ -25,6 +25,9 @@ public class AppTest {
 
 	@Test
 	public void startServer() throws IOException {
+		start = new Start();
+		addHander();
+		start.start();
 	}
 
 	private static void addHander() {
@@ -57,4 +60,5 @@ public class AppTest {
 		startServer();
 		// start.stop();
 	}
+
 }
