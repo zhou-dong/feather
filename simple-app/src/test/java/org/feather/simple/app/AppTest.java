@@ -55,10 +55,4 @@ public class AppTest {
 		}
 	}
 
-	@Test
-	public void testCloseServer() throws IOException {
-		startServer();
-		// start.stop();
-	}
-
 }
