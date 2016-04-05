@@ -3,15 +3,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-
 	<parent>
 		<groupId>org.feather</groupId>
 		<artifactId>org.feather</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
+	<artifactId>org.feather.simple-app</artifactId>
 
-	<artifactId>org.feather.app</artifactId>
-	<name>app</name>
+	<name>simple-app</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
@@ -27,11 +26,15 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.thetransactioncompany</groupId>
+			<artifactId>jsonrpc2-server</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
 
 	</dependencies>
-
 </project>
