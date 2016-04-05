@@ -14,16 +14,20 @@ import com.thetransactioncompany.jsonrpc2.server.RequestHandler;
 
 public class AppTest {
 
-	Start start = null;
+	public static Start start = null;
 
-	@Test
-	public void startServer() throws IOException {
+	public static void main(String[] args) throws IOException {
 		start = new Start();
 		addHander();
 		start.start();
+		start.stop();
 	}
 
-	private void addHander() {
+	@Test
+	public void startServer() throws IOException {
+	}
+
+	private static void addHander() {
 		RequestHandler handler = new RequestHandler() {
 			public JSONRPC2Response process(JSONRPC2Request request, MessageContext requestCtx) {
 				List<Object> params = request.getPositionalParams();
@@ -48,4 +52,9 @@ public class AppTest {
 		}
 	}
 
+	@Test
+	public void testCloseServer() throws IOException {
+		startServer();
+		// start.stop();
+	}
 }

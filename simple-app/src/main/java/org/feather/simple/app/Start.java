@@ -17,7 +17,10 @@ public class Start {
 	}
 
 	public void start() {
-		server.run();
+		server.start();
 	}
 
+	public void stop() {
+		server.stop();
+	}
 }

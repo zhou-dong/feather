@@ -41,17 +41,24 @@ public class Server implements Runnable {
 		dispatcher.register(handler);
 	}
 
+	public void start() {
+		alive = true;
+		thread = new Thread(this);
+		thread.start();
+	}
+
 	public void run() {
-		while (alive == true && !thread.isInterrupted()) {
+		while (!thread.isInterrupted() && alive) {
 			try {
 				threadPool.execute(new ThreadHandler(serverSocket.accept()));
 			} catch (IOException e) {
 				logger.error(e.getMessage(), e);
 			}
 		}
+		stop();
 	}
 
-	public void strop() {
+	public void stop() {
 		alive = false;
 		try {
 			thread.join();
