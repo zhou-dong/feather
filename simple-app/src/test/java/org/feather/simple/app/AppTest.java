@@ -18,19 +18,13 @@ public class AppTest {
 
 	public static void main(String[] args) throws IOException {
 		start = new Start();
-		addHander();
+		addEchoHander();
+		addPrintHander();
 		start.start();
 		start.stop();
 	}
 
-	@Test
-	public void startServer() throws IOException {
-		start = new Start();
-		addHander();
-		start.start();
-	}
-
-	private static void addHander() {
+	private static void addEchoHander() {
 		RequestHandler handler = new RequestHandler() {
 			public JSONRPC2Response process(JSONRPC2Request request, MessageContext requestCtx) {
 				List<Object> params = request.getPositionalParams();
@@ -44,6 +38,21 @@ public class AppTest {
 		start.register(handler);
 	}
 
+	private static void addPrintHander() {
+		RequestHandler handler = new RequestHandler() {
+			public JSONRPC2Response process(JSONRPC2Request request, MessageContext requestCtx) {
+				List<Object> params = request.getPositionalParams();
+				System.out.println(params.get(0));
+				return new JSONRPC2Response(params.get(0));
+			}
+
+			public String[] handledRequests() {
+				return new String[] { "print" };
+			}
+		};
+		start.register(handler);
+	}
+
 	@Test
 	public void testClient() {
 		for (int i = 0; i < 100; i++) {
@@ -52,6 +61,9 @@ public class AppTest {
 			JSONRPC2Response response = Client.request("127.0.0.1",
 					new JSONRPC2Request("echo", params, i));
 			System.out.println(response.toJSONString());
+			// JSONRPC2Response response1 = Client.request("127.0.0.1",
+			// new JSONRPC2Request("print", params, i));
+			// System.out.println(response1.toJSONString());
 		}
 	}
 
