@@ -42,8 +42,7 @@ public class AppTest {
 		RequestHandler handler = new RequestHandler() {
 			public JSONRPC2Response process(JSONRPC2Request request, MessageContext requestCtx) {
 				List<Object> params = request.getPositionalParams();
-				System.out.println(params.get(0));
-				return new JSONRPC2Response(params.get(0));
+				return new JSONRPC2Response(params.get(0), request.getID());
 			}
 
 			public String[] handledRequests() {
@@ -61,9 +60,6 @@ public class AppTest {
 			JSONRPC2Response response = Client.request("127.0.0.1",
 					new JSONRPC2Request("echo", params, i));
 			System.out.println(response.toJSONString());
-			// JSONRPC2Response response1 = Client.request("127.0.0.1",
-			// new JSONRPC2Request("print", params, i));
-			// System.out.println(response1.toJSONString());
 		}
 	}
 
