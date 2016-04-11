@@ -84,6 +84,7 @@ public class Server implements Runnable {
 			JSONRPC2Request request = getRequest();
 			if (request != null) {
 				JSONRPC2Response response = dispatcher.process(request, null);
+				logger.info(response.toJSONString());
 				SocketUtil.sendMessage(socket, response.toJSONString());
 			}
 		}
