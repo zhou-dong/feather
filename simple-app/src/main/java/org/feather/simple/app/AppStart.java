@@ -1,6 +1,5 @@
 package org.feather.simple.app;
 
-import java.io.IOException;
 import java.util.List;
 
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
@@ -10,16 +9,14 @@ import com.thetransactioncompany.jsonrpc2.server.RequestHandler;
 
 public class AppStart {
 
-	public static Server server = null;
-
-	public static void main(String[] args) throws IOException {
-		server = new Server();
-		createEchoHander();
-		createAddHander();
+	public static void main(String[] args) {
+		Server server = new Server();
+		createEchoHander(server);
+		createAddHander(server);
 		server.start();
 	}
 
-	private static void createEchoHander() {
+	private static void createEchoHander(Server server) {
 		RequestHandler handler = new RequestHandler() {
 			public JSONRPC2Response process(JSONRPC2Request request, MessageContext requestCtx) {
 				List<Object> params = request.getPositionalParams();
@@ -33,7 +30,7 @@ public class AppStart {
 		server.register(handler);
 	}
 
-	private static void createAddHander() {
+	private static void createAddHander(Server server) {
 		RequestHandler handler = new RequestHandler() {
 			public JSONRPC2Response process(JSONRPC2Request request, MessageContext requestCtx) {
 				List<Object> params = request.getPositionalParams();

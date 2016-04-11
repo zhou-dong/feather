@@ -29,12 +29,10 @@ public class Server implements Runnable {
 	private Dispatcher dispatcher;
 	private boolean alive;
 
-	public Server() throws IOException {
+	public Server() {
 		threadPool = Executors.newCachedThreadPool();
-		serverSocket = new ServerSocket(Global.serverPort);
 		dispatcher = new Dispatcher();
 		thread = new Thread(this);
-		alive = true;
 	}
 
 	public void register(RequestHandler handler) {
@@ -49,6 +47,11 @@ public class Server implements Runnable {
 	}
 
 	public void run() {
+		try {
+			serverSocket = new ServerSocket(Global.serverPort);
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}
 		while (!thread.isInterrupted() && alive) {
 			try {
 				threadPool.execute(new ThreadHandler(serverSocket.accept()));
