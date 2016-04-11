@@ -45,6 +45,7 @@ public class Server implements Runnable {
 		alive = true;
 		thread = new Thread(this);
 		thread.start();
+		logger.info("server is running now");
 	}
 
 	public void run() {

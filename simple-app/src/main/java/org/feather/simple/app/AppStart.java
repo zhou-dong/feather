@@ -10,17 +10,16 @@ import com.thetransactioncompany.jsonrpc2.server.RequestHandler;
 
 public class AppStart {
 
-	public static Start start = null;
+	public static Server server = null;
 
 	public static void main(String[] args) throws IOException {
-		start = new Start();
-		addEchoHander();
-		addPrintHander();
-		start.start();
-		start.stop();
+		server = new Server();
+		createEchoHander();
+		createAddHander();
+		server.start();
 	}
 
-	private static void addEchoHander() {
+	private static void createEchoHander() {
 		RequestHandler handler = new RequestHandler() {
 			public JSONRPC2Response process(JSONRPC2Request request, MessageContext requestCtx) {
 				List<Object> params = request.getPositionalParams();
@@ -31,21 +30,23 @@ public class AppStart {
 				return new String[] { "echo" };
 			}
 		};
-		start.register(handler);
+		server.register(handler);
 	}
 
-	private static void addPrintHander() {
+	private static void createAddHander() {
 		RequestHandler handler = new RequestHandler() {
 			public JSONRPC2Response process(JSONRPC2Request request, MessageContext requestCtx) {
 				List<Object> params = request.getPositionalParams();
-				return new JSONRPC2Response(params.get(0), request.getID());
+				int p0 = Integer.parseInt(params.get(0) + "");
+				int p1 = Integer.parseInt(params.get(1) + "");
+				return new JSONRPC2Response(p0 + p1, request.getID());
 			}
 
 			public String[] handledRequests() {
-				return new String[] { "print" };
+				return new String[] { "add" };
 			}
 		};
-		start.register(handler);
+		server.register(handler);
 	}
 
 }
