@@ -57,7 +57,7 @@ public class AppStart {
 			}
 
 			public String[] handledRequests() {
-				return new String[] { "time" };
+				return new String[] { "multiply" };
 			}
 		};
 		server.register(handler);

@@ -45,7 +45,7 @@ public class AppTest {
 			params.add(i);
 			params.add(i + 1);
 			JSONRPC2Response response = Client.request("127.0.0.1",
-					new JSONRPC2Request("time", params, i));
+					new JSONRPC2Request("multiply", params, i));
 			logger.info(response.toJSONString());
 		}
 	}
