@@ -9,8 +9,6 @@ public class ExampleModule implements Module {
 	public void afterCreate(Object[] params) {
 	}
 
-	Class<ExampleModule> cls = null;
-
 	public boolean init(boolean isReload) {
 		return true;
 	}
