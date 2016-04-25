@@ -1,7 +1,7 @@
 # Socket Server
 
 - Multiple Threads
-- [JSON-RPC Protocol](http://www.jsonrpc.org/specification)
+- [JSON-RPC Protocol](http://www.jsonrpc.org/specification) or https://en.wikipedia.org/wiki/JSON-RPC
 
 ## Service register
 
@@ -28,9 +28,18 @@ register handler to server
 server.register(new EchoHandler());
 ```
 
+server start
+
+```java
+Server server = new Server();
+server.register(new EchoHandler());
+server.start();
+```
+
 ## client request
 
 ```Java
-
-
+List<Object> params = new ArrayList<Object>();
+params.add("hello world!");
+JSONRPC2Response response = Client.request("127.0.0.1", new JSONRPC2Request("echo", params, i));
 ```

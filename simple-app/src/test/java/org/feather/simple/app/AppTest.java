@@ -38,16 +38,4 @@ public class AppTest {
 		}
 	}
 
-	@Test
-	public void testTimeClient() {
-		for (int i = 0; i < 100; i++) {
-			List<Object> params = new ArrayList<Object>();
-			params.add(i);
-			params.add(i + 1);
-			JSONRPC2Response response = Client.request("127.0.0.1",
-					new JSONRPC2Request("multiply", params, i));
-			logger.info(response.toJSONString());
-		}
-	}
-
 }
