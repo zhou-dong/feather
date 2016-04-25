@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import org.feather.common.app.Request;
 import org.feather.common.app.Response;
@@ -24,11 +25,14 @@ public class SocketUtil {
 	}
 
 	public static void sendMessage(Socket socket, String message) {
-		PrintWriter out = getWriter(socket);
-		if (out == null)
-			return;
-		out.println(message);
-		out.flush();
+		PrintWriter out;
+		try {
+			out = new PrintWriter(socket.getOutputStream(), true);
+			out.println(message);
+			out.flush();
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}
 	}
 
 	public static String getMessage(Socket socket) {
@@ -42,13 +46,19 @@ public class SocketUtil {
 		}
 	}
 
-	private static PrintWriter getWriter(Socket socket) {
+	public static String request(String host, int port, String request) {
+		Socket socket = null;
 		try {
-			return new PrintWriter(socket.getOutputStream(), true);
+			socket = new Socket(host, port);
+			SocketUtil.sendMessage(socket, request);
+			return SocketUtil.getMessage(socket);
+		} catch (UnknownHostException e) {
+			logger.error(e.getMessage(), e);
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
-			return null;
+		} finally {
+			FileUtil.close(socket);
 		}
+		return "";
 	}
-
 }
