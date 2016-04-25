@@ -30,7 +30,7 @@ public class Server implements Runnable {
 	private boolean alive;
 
 	public Server() {
-		threadPool = Executors.newCachedThreadPool();
+		threadPool = Executors.newFixedThreadPool(10);
 		dispatcher = new Dispatcher();
 		thread = new Thread(this);
 	}
