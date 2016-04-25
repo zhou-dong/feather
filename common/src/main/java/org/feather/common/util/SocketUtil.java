@@ -7,8 +7,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import org.feather.common.app.Request;
-import org.feather.common.app.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,13 +14,6 @@ public class SocketUtil {
 
 	private static Logger logger = LoggerFactory.getLogger(SocketUtil.class);
 
-	public static void sendRequest(Socket socket, Request request) {
-		sendMessage(socket, Request.toString(request));
-	}
-
-	public static void sendResponse(Socket socket, Response response) {
-		sendMessage(socket, Response.toString(response));
-	}
 
 	public static void sendMessage(Socket socket, String message) {
 		PrintWriter out;

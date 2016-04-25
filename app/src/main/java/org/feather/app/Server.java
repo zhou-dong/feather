@@ -115,7 +115,7 @@ public class Server implements Module, Runnable {
 				Response response = doRequest(request);
 				if (response == null)
 					return;
-				SocketUtil.sendResponse(socket, response);
+				SocketUtil.sendMessage(socket, Response.toString(response));
 			} finally {
 				FileUtil.close(socket);
 			}
