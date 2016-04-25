@@ -30,13 +30,16 @@ public class Server implements Runnable {
 	private boolean alive;
 
 	public Server() {
-		threadPool = Executors.newFixedThreadPool(10);
+		threadPool = Executors.newFixedThreadPool(5);
 		dispatcher = new Dispatcher();
 		thread = new Thread(this);
 	}
 
 	public void register(RequestHandler handler) {
 		dispatcher.register(handler);
+		for (String service : handler.handledRequests()) {
+			logger.info("server register service [{}]", service);
+		}
 	}
 
 	public void start() {
@@ -82,9 +85,9 @@ public class Server implements Runnable {
 
 		public void run() {
 			JSONRPC2Request request = getRequest();
+			logger.debug("handler request {}", request.toJSONString());
 			if (request != null) {
 				JSONRPC2Response response = dispatcher.process(request, null);
-				logger.info(response.toJSONString());
 				SocketUtil.sendMessage(socket, response.toJSONString());
 			}
 		}
