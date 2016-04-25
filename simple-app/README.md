@@ -39,10 +39,7 @@ server.start();
 ## Client request
 
 ```Java
-String host = "127.0.0.1" ;
-String method = "echo" ;
 List<Object> params = new ArrayList<Object>();
 params.add("hello world!");
-int id = 0;
-JSONRPC2Response response = Client.request(host, new JSONRPC2Request(method, params, id));
+JSONRPC2Response response = Client.request("127.0.0.1", new JSONRPC2Request("echo", params, 0));
 ```
