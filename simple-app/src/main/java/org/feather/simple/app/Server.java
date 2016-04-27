@@ -47,6 +47,7 @@ public class Server implements Runnable {
 		thread = new Thread(this);
 		thread.start();
 		logger.info("server is running now");
+		logger.info("server ip is [{}] with port [{}]", StringUtil.getLocalIP(), Global.serverPort);
 	}
 
 	public void run() {
